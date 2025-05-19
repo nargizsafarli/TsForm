@@ -1,5 +1,4 @@
 import { createContext, useState } from "react";
-// import { User } from "@supabase/supabase-js";
 import { supabase } from "../client";
 import type { User } from "@supabase/supabase-js";
 
@@ -51,7 +50,8 @@ export const GlobalProvider = ({ children }: { children: any }) => {
         },
       });
 
-      if (error) return { error: error.message };
+      if (error)
+         return { error: error.message };
       return { data };
     } catch (err: any) {
       return { error: err.message };

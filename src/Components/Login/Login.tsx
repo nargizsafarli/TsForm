@@ -20,7 +20,7 @@ function Login() {
       return;
     }
 
-    const { data, error } = await login({ email, password });
+    const {error } = await login({ email, password });
 
     if (error) {
       setFormError(error);

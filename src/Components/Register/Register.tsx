@@ -1,7 +1,15 @@
-import { Link, useNavigate } from "react-router-dom"
-import reg from "./Register.module.css"
+import { Link, useNavigate } from "react-router-dom";
+import reg from "./Register.module.css";
 import { useContext, useState } from "react";
 import { GlobalContext } from "../../Context/GlobalContext";
+
+interface FormErrors {
+  name?: string;
+  surname?: string;
+  phone?: string;
+  email?: string;
+  password?: string;
+}
 
 function Register() {
   const [name, setName] = useState<string>("");
@@ -9,20 +17,21 @@ function Register() {
   const [phone, setPhone] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  const [formErrors, setFormErrors] = useState<FormErrors>({});
   const [generalError, setGeneralError] = useState<string>("");
-  const navigate=useNavigate()
-  const {register}=useContext(GlobalContext)
 
-    const validateForm = (): boolean => {
-    const errors: Record<string, string> = {};
+  const navigate = useNavigate();
+  const { register } = useContext(GlobalContext);
+
+  const validateForm = (): boolean => {
+    const errors: FormErrors = {};
 
     if (!name) errors.name = "Ad daxil edilməlidir.";
     if (!surname) errors.surname = "Soyad daxil edilməlidir.";
     if (!phone || !/^\d{1,10}$/.test(phone))
       errors.phone = "Mobil nömrə düzgün deyil!";
     if (!email || !/\S+@\S+\.\S+/.test(email))
-      errors.email = "Email (@gmail.com) formatinda olmalidir!";
+      errors.email = "Email (@gmail.com) formatında olmalıdır!";
     if (!password || password.length < 6)
       errors.password = "Şifrə ən azı 6 simvoldan ibarət olmalıdır.";
 
@@ -30,12 +39,12 @@ function Register() {
     return Object.keys(errors).length === 0;
   };
 
-  const handleSubmit = async(e:any) => {
+  const handleSubmit = async (e:any) => {
     e.preventDefault();
     setGeneralError("");
     if (!validateForm()) return;
 
-    const { data, error } = await register({ name, surname, phone, email, password });
+    const { error } = await register({ name, surname, phone, email, password });
 
     if (error) {
       setGeneralError(error);
